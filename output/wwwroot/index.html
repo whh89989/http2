@@ -1,0 +1,35 @@
+<html lang="zh-cn">
+<head>
+</head>
+<body>
+	<h1>hello httpd</h1>
+	<img src="imag/onepiece.jpg" alt="onepiece">
+	<!--<form action="cgi-bin/math_cgi" method="GET">
+	data1:<br>
+	<input type="text" name="data1" value="0">
+	<br>
+	data2:<br>
+	<input type="text" name="data2" value="0">
+	<br><br>
+	<input type="submit" value="Submit">
+    </form>--!>
+	<form action="/cgi-bin/insert_cgi" method="GET">
+		name:<input type="text" name=" name " value=""><br>
+		sex:<input type="text" name="  sex " value=""><br>
+		scores:<input type="text" name="scores" value=""><br>
+		<input type="submit" value="OK">
+	</form>
+
+	<table border="1">
+		<tr>
+			<td>row 1,cell 1</td>
+			<td>row 1,cell 2</td>
+		</tr>
+		<tr>
+			<td>row 2,cell 1</td>
+			<td>row 2,cell 2</td>
+		</tr>
+	</table>
+	<a href="/cgi-bin/select_cgi">check select</a>
+</body>
+</html>
