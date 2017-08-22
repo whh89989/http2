@@ -5,20 +5,21 @@ LDFLAGS=-lmysqlclient
 cc=g++
 
 .PHONY:all
-all:insert_cgi select_cgi
+all:insert_cgi select_one select_all 
 
 
 insert_cgi:insert_cgi.o sql.o
 	$(cc) -o $@ $^ -L$(LIB) $(LDFLAGS)
-select_cgi:select_cgi.o sql.o 
+select_all:select_all.o sql.o 
 	$(cc) -o $@ $^ -L$(LIB) $(LDFLAGS) #指定位置找库
-
+select_one:select_one.o sql.o 
+	$(cc) -o $@ $^ -L$(LIB) $(LDFLAGS) #指定位置找库
 %.o:%.cpp
 	$(cc) -c $< -I$(INCLUDE)  #显式的告诉在指定目录下查找
 
 .PHONY:clean
 clean:
-	rm -f *.o insert_cgi select_cgi
+	rm -f *.o insert_cgi select_all select_one
 
 
 

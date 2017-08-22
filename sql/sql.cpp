@@ -58,7 +58,38 @@ int sql::insert(const string &name,\
 		}
 	}
 }
-int sql::select()
+int sql::select_one(const string &id)
+{
+	std::string sql = "select * from scores where id=";
+	sql += id;
+	sql+="')";
+	cout<<sql<<endl;
+
+	int ret = mysql_query(conn,sql.c_str());
+	if(ret == 0){
+		MYSQL_RES *res = mysql_store_result(conn);
+    	if(res){
+			int lines = mysql_num_rows(res);
+			int cols = mysql_num_fields(res);
+			MYSQL_FIELD *fd = NULL;
+			for(;fd = mysql_fetch_field(res) ;){
+				std::cout<<fd->name<<' ';//拿出列名
+			}
+			std::cout<<endl;
+			int i = 0;
+			for(;i < lines; i++){
+				MYSQL_ROW row = mysql_fetch_row(res);
+				for(int j = 0;j < cols; j++){
+					std::cout<<row[j]<<' ';
+				}
+				std::cout<<std::endl;
+			}
+		}
+		return 0;
+	}
+	return -1;
+}
+int sql::select_all()
 {
 	std::string sql = "select * from scores";
 	int ret = mysql_query(conn,sql.c_str());

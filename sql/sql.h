@@ -21,7 +21,8 @@ class sql{
 		int insert(const string &name,\
 				    const string &password,\
 					const string &id);
-		int select();
+		int select_all();
+		int select_one(const string &id);
 		~sql();
 	private:
 		MYSQL *conn;

@@ -43,7 +43,8 @@ output:
 	@cp wwwroot/imag/onepiece.jpg output/wwwroot/imag
 	@cp wwwroot/cgi-bin/math_cgi output/wwwroot/cgi-bin
 	@cp sql/insert_cgi output/wwwroot/cgi-bin
-	@cp sql/select_cgi output/wwwroot/cgi-bin
+	@cp sql/select_one output/wwwroot/cgi-bin
+	@cp sql/select_all output/wwwroot/cgi-bin
 	@cp -rf sql/lib output
 	@cp httpd output
 	@cp plugin/ctl_server.sh output/
