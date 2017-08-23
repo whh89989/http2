@@ -28,6 +28,7 @@ void echo_error(int fd,int erroe_num);
 int echo_www(int fd,const char* path,int size);
 int exe_cgi(int fd,const char *method,\
 		const char* path,const char*query_string);
-
+int setnonblocking(int fd);
+void* alloc_ep_buff(int fd);
 
 #endif

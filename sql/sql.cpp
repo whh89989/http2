@@ -62,7 +62,7 @@ int sql::select_one(const string &id)
 {
 	std::string sql = "select * from scores where id=";
 	sql += id;
-	sql+="')";
+	sql+=";";
 	cout<<sql<<endl;
 
 	int ret = mysql_query(conn,sql.c_str());

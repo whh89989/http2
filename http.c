@@ -2,7 +2,7 @@
 
 int startup(const char*ip,int port)
 {
-	int sock = socket(AF_INET,SOCK_STREAM,0);
+	int sock = socket(AF_INET,SOCK_STREAM|SOCK_NONBLOCK,0);
 	if(sock<0){
 		perror("socket");
 		return -2;
@@ -26,7 +26,28 @@ int startup(const char*ip,int port)
 
 	return sock;
 }
+typedef struct ep_buff{
+	int fd;
+	char buff[1024];
+}ep_buff_t,*ep_buff_p;
 
+void* alloc_ep_buff(int fd)
+{
+	ep_buff_p n=(ep_buff_p)malloc(sizeof(ep_buff_t));
+	if(!n){
+		perror("malloc");
+		exit(6);
+	}
+	n->fd = fd;
+	return n;
+}
+int setnonblocking(int fd)
+{
+	int old_option=fcntl(fd,F_GETFL);
+	int new_option=old_option|O_NONBLOCK;
+	fcntl(fd,F_SETFL,new_option);
+	return old_option;
+}
 static int get_line(int fd, char *buf,int len)  //按行提取
 {
 	char c = '\0';
