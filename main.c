@@ -90,12 +90,12 @@ again:
 			//int sock = ((ep_buff_p)(events[i].data.ptr));
 			int sock = events[i].data.fd;
 
-			if((events[i].events & EPOLLERR) ||\
+			/*if((events[i].events & EPOLLERR) ||\
 			   (events[i].events & EPOLLHUP) ){//服务器出错
 				perror("epoll_wait");
 				close(events[i].data.fd);
 				continue;
-			}else if(listen_sock == sock && \
+			}else*/ if(listen_sock == sock && \
 					(events[i].events & EPOLLIN)){
             	 struct sockaddr_in client;
             	 socklen_t len = sizeof(client);
@@ -120,15 +120,17 @@ again:
 					perror("epoll_ctl error");
 					exit(1);
 				}
+				printf("client over\n");
 			}
 			else if(sock != listen_sock){
 				if(events[i].events & EPOLLIN){//
-				//new_sock = events[i].data.fd;
+				//int new_sock = events[i].data.fd;
 			    //ret = epoll_ctl(efd,EPOLL_CTL_DEL,sock,&ev);
-				if(ret < 0){
-					perror("epoll_ctl error");
-					exit(1);
-				}
+				//if(ret < 0){
+				//	perror("epoll_ctl error");
+				//	exit(1);
+				//}
+				printf("hander...\n");
 				handler_request(events[i].data.fd);//改过
 
 				close(events[i].data.fd);
@@ -136,9 +138,12 @@ again:
 			    ev.events = events[i].events | EPOLLIN ;
 			    ret = epoll_ctl(efd,EPOLL_CTL_DEL,sock,&ev);
 				close(sock);
+				printf("close over...\n");
 			}
 			else if(events[i].events&EPOLLOUT){//写事件就绪
+				printf("write...\n");
 			}else{
+				printf("what...\n");
 			}
 		}
 		}

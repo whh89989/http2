@@ -50,10 +50,13 @@ int setnonblocking(int fd)
 }
 static int get_line(int fd, char *buf,int len)  //按行提取
 {
+	printf("get line start...\n");
+	buf[len+1] = '\0';
 	char c = '\0';
 	int i = 0;
 	while(c != '\n'&&i < len-1)
 	{
+
 		ssize_t s = recv(fd,&c,1,0);
 		if(s > 0)
 		{
@@ -71,8 +74,11 @@ static int get_line(int fd, char *buf,int len)  //按行提取
 			}
 			buf[i++] = c;
 		}
+		else
+			break;
 	}
 	buf[i] = 0;
+	printf("get line end...\n");
 	return i;
 }
 
@@ -247,6 +253,7 @@ int exe_cgi(int fd,const char *method,\
 }
 void* handler_request(void *arg)
 {
+	printf("hander_request start...\n");
     int fd = (int)arg;
     int errno_num = 200;
     int cgi = 0;
@@ -263,33 +270,52 @@ void* handler_request(void *arg)
     printf("########################################\n");
 #else
     //1 method,2 url -> GET POST / url ->exist -> pri
+//	printf(" start 1.\n");
     char method[SIZE/10];
     char url[SIZE];
     char path[SIZE];
     char buff[SIZE];
     int i,j;
+
+	printf("method is %s\n",method);
+	printf("url is %s\n",url);
+	printf("path is %s\n",path);
+	printf("buff is %s\n",buff);
+//	printf(" start 2.\n");
     if(get_line(fd,buff,sizeof(buff)) <= 0){
         print_log("get request line error",FATAL);
         errno_num = 501;
         goto end;
     }
+
     i = 0,j = 0;
-    while( i < sizeof(method) - 1 && j < sizeof(buff) &&\
-			!isspace(buff[j])){
+
+	printf(" start 1.\n");
+	printf(" method size is%d\n",sizeof(method));
+	printf(" buff size is%d\n",sizeof(buff));
+    while( (i < sizeof(method) - 1) && j < sizeof(buff) &&\
+			(!isspace(buff[j]))){
         method[i] = buff[j];
         i++,j++;
+		printf("i :%d\n",i);
+		printf("j :%d\n",j);
+		printf("method[i] :%c\n",method[i]);
+		printf("buff[i] :%c\n",buff[i]);
     }
     method[i] = 0;
     //GET  /a/b http/1.0
     while(isspace(buff[j]) && j < sizeof(buff)){
         j++;
     }
+	printf(" start 2.\n");
     i = 0;
     while( i < sizeof(url) && j < sizeof(buff) && \
             !isspace(buff[j])){
         url[i] = buff[j];
         i++,j++;
     }
+
+	printf(" start 3.\n");
     url[i] = 0;  //至少是一个/，若是/则将首页返回
     printf("method: %s,url: %s\n",method,url);
     if(strcasecmp(method,"GET") && strcasecmp(method,"POST")){  //忽略大小写
@@ -345,6 +371,8 @@ void* handler_request(void *arg)
 		}
 end:
 	echo_error(fd,errno_num);
+
+	printf(" start end.\n");
 	close(fd);
 #endif
 }
